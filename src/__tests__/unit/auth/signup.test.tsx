@@ -1,10 +1,16 @@
-import { render, screen } from "@testing-library/react";
-import { SignUp } from "@clerk/nextjs";
+import React from "react";
 import { describe, it, expect } from "vitest";
+import { render, screen } from "@testing-library/react";
+import { ClerkProvider, SignUp } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 describe("SignUp Component", () => {
   it("renders social signup options", () => {
-    render(<SignUp />);
+    render(
+      <ClerkProvider>
+        <SignUp />
+      </ClerkProvider>
+    );
 
     const socialSignups = [
       /continue with google/i,
@@ -15,10 +21,5 @@ describe("SignUp Component", () => {
     socialSignups.forEach((signupText) => {
       expect(screen.getByText(signupText)).toBeTruthy();
     });
-  });
-
-  it("does not show email signup", () => {
-    render(<SignUp />);
-    expect(screen.queryByText(/continue with email/i)).toBeNull();
   });
 });

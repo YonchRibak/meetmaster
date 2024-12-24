@@ -1,6 +1,8 @@
+import React from "react";
 import { describe, it, expect } from "vitest";
-import { ClerkProvider, SignIn, SignUp } from "@clerk/nextjs";
 import { render, screen, fireEvent } from "@testing-library/react";
+import { ClerkProvider, SignIn, SignUp } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 describe("Authentication Flow", () => {
   it("allows navigation between sign in and sign up pages", () => {
@@ -19,29 +21,13 @@ describe("Authentication Flow", () => {
       </ClerkProvider>
     );
 
-    expect(screen.getByText(/continue with google/i)).toBeTruthy();
-  });
-
-  it("checks social login method consistency", () => {
-    render(
-      <ClerkProvider>
-        <SignIn />
-      </ClerkProvider>
-    );
-
-    const signInMethods = [
+    const socialMethods = [
       /continue with google/i,
       /continue with microsoft/i,
       /continue with apple/i,
     ];
 
-    render(
-      <ClerkProvider>
-        <SignUp />
-      </ClerkProvider>
-    );
-
-    signInMethods.forEach((method) => {
+    socialMethods.forEach((method) => {
       expect(screen.getByText(method)).toBeTruthy();
     });
   });
